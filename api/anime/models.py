@@ -1,5 +1,6 @@
-from django.contrib.auth.models import AbstractUser
 from django.db import models
+
+from users.models import User
 
 
 class Genre(models.Model):
@@ -18,13 +19,6 @@ class Anime(models.Model):
 
     def __str__(self):
         return self.title
-
-
-class User(AbstractUser):
-    slug = models.SlugField(max_length=150)
-
-    def __str__(self):
-        return self.username
 
 
 class Review(models.Model):
