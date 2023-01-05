@@ -17,6 +17,6 @@ def get_user_detail(request, slug):
 @api_view()
 def get_review_list(request, slug):
     user = services.get_user_by_slug(slug)
-    reviews = anime_models.Review.objects.filter(user_id=user.pk)
+    reviews = anime_models.Review.objects.filter(user_id=user.pk).select_related()
     serializer = anime_serializers.ReviewSerializer(reviews, many=True)
     return Response(serializer.data)

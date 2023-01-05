@@ -10,9 +10,9 @@ class AnimeSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    anime_title = serializers.CharField(source='anime.title')
+    anime_title = serializers.CharField(source='anime.title', required=False)
+    anime_episodes = serializers.CharField(source='anime.episodes', required=False)
 
     class Meta:
         model = models.Review
-        fields = ['score', 'text', 'anime_title']
-
+        fields = ('anime_title', 'status', 'score', 'watched_episodes', 'anime_episodes', 'text')

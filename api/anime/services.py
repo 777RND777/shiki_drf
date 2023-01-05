@@ -10,18 +10,27 @@ def get_anime_by_slug(slug: str) -> Anime:
         raise Http404
 
 
-def create_review(data, user_id: int, anime_id: int) -> str:
-    review = Review.objects.filter(user_id=user_id, anime_id=anime_id).first()
+def create_review(data: dict, user_id: int, anime_id: int) -> Review:
+    review = Review.objects.filter(user_id=user_id, anime_id=anime_id).select_related().first()
     if review:
-        review.score = data.get('score', 0)
-        review.save()
-        return "Review was updated"
+        return update_review(review, data)
 
-    data['user_id'] = user_id
-    data['anime_id'] = anime_id
-    review = Review(**data)
+    review = Review(user_id=user_id, anime_id=anime_id, **data)
+    if review.status == Review.Status.COMPLETED:
+        review.watched_episodes = review.anime.episodes
     review.save()
-    return "Review was created"
+    return review
+
+
+def update_review(review: Review, data: dict) -> Review:
+    review.watched_episodes = data.get('watched_episodes', review.watched_episodes)
+    if data.get('status') == Review.Status.COMPLETED and review.status != data.get('status'):
+        review.watched_episodes = review.anime.episodes
+    review.status = data.get('status', review.status)
+    review.score = data.get('score', review.score)
+    review.text = data.get('text', review.text)
+    review.save()
+    return review
 
 
 def update_anime_score(value: int, anime: Anime) -> None:

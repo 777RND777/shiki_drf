@@ -21,6 +21,7 @@ class Genre(models.Model):
 
 class Anime(models.Model):
     title = models.CharField(max_length=500, unique=True)
+    episodes = models.IntegerField(validators=[MinValueValidator(0)])
     slug = models.SlugField(max_length=500)
     score = models.FloatField(validators=score_validator, default=0)
     genres = models.ManyToManyField(Genre, blank=True)
@@ -37,9 +38,18 @@ class Anime(models.Model):
 
 
 class Review(models.Model):
-    score = models.IntegerField(validators=score_validator, default=0)
+    class Status(models.TextChoices):
+        COMPLETED = "Completed"
+        DROPPED = "Dropped"
+        ON_HOLD = "On hold"
+        RE_WATCHING = "Re-watching"
+        WATCHING = "Watching"
+
     anime = models.ForeignKey(Anime, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    status = models.CharField(max_length=50, choices=Status.choices, default=Status.COMPLETED)
+    watched_episodes = models.IntegerField(default=0)
+    score = models.IntegerField(validators=score_validator, default=0)
     text = models.TextField(blank=True)
 
     def __str__(self):

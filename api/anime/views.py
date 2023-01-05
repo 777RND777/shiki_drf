@@ -30,6 +30,6 @@ def review_anime(request, slug):
     serializer = serializers.ReviewSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     data = serializer.validated_data
-    message = services.create_review(data, request.user.pk, anime.pk)
-    services.update_anime_score(data.get('score', 0), anime)
-    return Response({"message": message})
+    review = services.create_review(data, request.user.pk, anime.pk)
+    services.update_anime_score(data.get('score', review.score), anime)
+    return Response({"message": "OK"})
