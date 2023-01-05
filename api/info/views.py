@@ -1,3 +1,4 @@
+from django.shortcuts import redirect
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -15,8 +16,10 @@ def get_user_detail(request, slug):
 
 
 @api_view()
-def get_review_list(request, slug):
-    user = services.get_user_by_slug(slug)
-    reviews = anime_models.Review.objects.filter(user_id=user.pk).select_related()
+def get_review_list(request, slug, status: str = ""):
+    if len(status) > 0 and status not in anime_models.Review.Status:
+        return redirect(get_review_list, slug)
+
+    reviews = services.get_user_reviews(slug, status)
     serializer = anime_serializers.ReviewSerializer(reviews, many=True)
     return Response(serializer.data)

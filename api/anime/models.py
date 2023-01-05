@@ -39,11 +39,12 @@ class Anime(models.Model):
 
 class Review(models.Model):
     class Status(models.TextChoices):
-        COMPLETED = "Completed"
-        DROPPED = "Dropped"
-        ON_HOLD = "On hold"
-        RE_WATCHING = "Re-watching"
-        WATCHING = "Watching"
+        PLANNED_TO_WATCH = "planned"
+        WATCHING = "watching"
+        REWATCHING = "rewatching"
+        COMPLETED = "completed"
+        ON_HOLD = "on_hold"
+        DROPPED = "dropped"
 
     anime = models.ForeignKey(Anime, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
