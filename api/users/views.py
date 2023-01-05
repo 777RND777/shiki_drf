@@ -24,10 +24,3 @@ def sign_up(request):
     data = serializer.validated_data
     serializer.instance = services.create_user(data)
     return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
-@api_view()
-def get_user_detail(request, slug):
-    user = services.get_user_by_slug(slug)
-    serializer = serializers.UserSerializer(user)
-    return Response(serializer.data)
