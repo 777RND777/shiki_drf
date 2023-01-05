@@ -1,5 +1,6 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from . import models, services, serializers
@@ -20,3 +21,15 @@ def get_anime_detail(request, slug):
     anime = services.get_anime_by_slug(slug)
     serializer = serializers.AnimeSerializer(anime)
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def review_anime(request, slug):
+    anime = services.get_anime_by_slug(slug)
+    serializer = serializers.ReviewSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    data = serializer.validated_data
+    message = services.create_review(data, request.user.pk, anime.pk)
+    services.update_anime_score(data.get('score', 0), anime)
+    return Response({"message": message})

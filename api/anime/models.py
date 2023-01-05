@@ -4,7 +4,7 @@ from django.utils.text import slugify
 
 from users.models import User
 
-score_validator = [MaxValueValidator(10), MinValueValidator(1)]
+score_validator = [MinValueValidator(0), MaxValueValidator(10)]
 
 
 class Genre(models.Model):
@@ -22,7 +22,7 @@ class Genre(models.Model):
 class Anime(models.Model):
     title = models.CharField(max_length=500, unique=True)
     slug = models.SlugField(max_length=500)
-    score = models.FloatField(default=0, validators=score_validator)
+    score = models.FloatField(validators=score_validator, default=0)
     genres = models.ManyToManyField(Genre, blank=True)
 
     def save(self, *args, **kwargs):
@@ -37,10 +37,10 @@ class Anime(models.Model):
 
 
 class Review(models.Model):
-    value = models.IntegerField(validators=score_validator)
+    score = models.IntegerField(validators=score_validator, default=0)
     anime = models.ForeignKey(Anime, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField(blank=True)
 
     def __str__(self):
-        return f"{self.value} for {self.anime} from {self.user}"
+        return f"{self.score} for {self.anime} from {self.user}"
