@@ -1,3 +1,4 @@
+from django.shortcuts import redirect
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
@@ -7,11 +8,14 @@ from . import models, services, serializers
 
 
 @api_view()
-def get_anime_list(request):
+def get_anime_list(request, genre_name: str = ""):
+    if len(genre_name) > 0 and models.Genre.objects.filter(name=genre_name).first() is None:
+        return redirect(get_anime_list)
+
     paginator = PageNumberPagination()
-    paginator.page_size = 10
-    person_objects = models.Anime.objects.all()
-    result_page = paginator.paginate_queryset(person_objects, request)
+    paginator.page_size = 20
+    anime_objects = services.get_anime_list(genre_name)
+    result_page = paginator.paginate_queryset(anime_objects, request)
     serializer = serializers.AnimeSerializer(result_page, many=True)
     return paginator.get_paginated_response(serializer.data)
 

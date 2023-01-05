@@ -20,6 +20,6 @@ def get_review_list(request, slug, status: str = ""):
     if len(status) > 0 and status not in anime_models.Review.Status:
         return redirect(get_review_list, slug)
 
-    reviews = services.get_user_reviews(slug, status)
-    serializer = anime_serializers.ReviewSerializer(reviews, many=True)
+    review_objects = services.get_user_reviews(slug, status)
+    serializer = anime_serializers.ReviewSerializer(review_objects, many=True)
     return Response(serializer.data)

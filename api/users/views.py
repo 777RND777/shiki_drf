@@ -9,9 +9,9 @@ from . import models, serializers, services
 @api_view()
 def get_user_list(request):
     paginator = PageNumberPagination()
-    paginator.page_size = 10
-    person_objects = models.User.objects.filter(is_superuser=False)
-    result_page = paginator.paginate_queryset(person_objects, request)
+    paginator.page_size = 20
+    user_objects = models.User.objects.filter(is_superuser=False)
+    result_page = paginator.paginate_queryset(user_objects, request)
     serializer = serializers.UserSerializer(result_page, many=True)
     return paginator.get_paginated_response(serializer.data)
 

@@ -3,6 +3,12 @@ from django.http import Http404
 from .models import Anime, Review
 
 
+def get_anime_list(genre_name: str) -> Anime:
+    if len(genre_name) == 0:
+        return Anime.objects.all()
+    return Anime.objects.filter(genres__name=genre_name)
+
+
 def get_anime_by_slug(slug: str) -> Anime:
     try:
         return Anime.objects.get(slug=slug)

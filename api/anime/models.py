@@ -8,21 +8,16 @@ score_validator = [MinValueValidator(0), MaxValueValidator(10)]
 
 
 class Genre(models.Model):
-    title = models.CharField(max_length=250, unique=True)
-    slug = models.SlugField(max_length=250)
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.title)
-        super().save(*args, **kwargs)
+    name = models.CharField(max_length=250, unique=True)
 
     def __str__(self):
-        return self.title
+        return self.name
 
 
 class Anime(models.Model):
     title = models.CharField(max_length=500, unique=True)
-    episodes = models.IntegerField(validators=[MinValueValidator(0)])
     slug = models.SlugField(max_length=500)
+    episodes = models.IntegerField(validators=[MinValueValidator(0)])
     score = models.FloatField(validators=score_validator, default=0)
     genres = models.ManyToManyField(Genre, blank=True)
 

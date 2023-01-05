@@ -11,7 +11,7 @@ class AnimeSerializer(serializers.ModelSerializer):
 
 class ReviewSerializer(serializers.ModelSerializer):
     anime_title = serializers.CharField(source='anime.title', required=False)
-    anime_episodes = serializers.CharField(source='anime.episodes', required=False)
+    anime_episodes = serializers.IntegerField(source='anime.episodes', required=False)
 
     class Meta:
         model = models.Review
