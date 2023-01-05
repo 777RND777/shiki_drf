@@ -11,3 +11,9 @@ class RegistrationSerializer(ModelSerializer):
             'username': {'required': True},
             'password': {'required': True, 'write_only': True}
         }
+
+
+class UserSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["first_name", "last_name", "username", "password"]
