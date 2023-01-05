@@ -1,9 +1,9 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 
 from .models import User
 
 
-class RegistrationSerializer(ModelSerializer):
+class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["first_name", "last_name", "username", "password"]
@@ -13,7 +13,7 @@ class RegistrationSerializer(ModelSerializer):
         }
 
 
-class UserSerializer(ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["first_name", "last_name", "username"]
