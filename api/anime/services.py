@@ -3,8 +3,12 @@ from django.http import Http404
 from .models import Anime, Review
 
 
-def get_anime_list(genre: str, studio: str) -> Anime:
+def get_anime_list(kind: str, status: str, genre: str, studio: str) -> Anime:
     filter_kwargs = {}
+    if len(kind) > 0:
+        filter_kwargs['kind'] = kind
+    if len(status) > 0:
+        filter_kwargs['kind'] = status
     if len(genre) > 0:
         filter_kwargs['genres__slug'] = genre
     if len(studio) > 0:

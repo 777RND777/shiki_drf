@@ -8,7 +8,11 @@ from . import models, services, serializers
 
 
 @api_view()
-def get_anime_list(request, genre: str = "", studio: str = ""):
+def get_anime_list(request, kind: str = "", status: str = "", genre: str = "", studio: str = ""):
+    if len(kind) > 0 and kind not in models.Anime.Kind:
+        return redirect(get_anime_list)
+    if len(status) > 0 and status not in models.Anime.Status:
+        return redirect(get_anime_list)
     if len(genre) > 0 and models.Genre.objects.filter(slug=genre).first() is None:
         return redirect(get_anime_list)
     if len(studio) > 0 and models.Studio.objects.filter(slug=studio).first() is None:
@@ -16,7 +20,7 @@ def get_anime_list(request, genre: str = "", studio: str = ""):
 
     paginator = PageNumberPagination()
     paginator.page_size = 20
-    anime_objects = services.get_anime_list(genre, studio)
+    anime_objects = services.get_anime_list(kind, status, genre, studio)
     result_page = paginator.paginate_queryset(anime_objects, request)
     serializer = serializers.AnimeSerializer(result_page, many=True)
     return paginator.get_paginated_response(serializer.data)

@@ -23,7 +23,7 @@ class Studio(models.Model):
 
 
 class Anime(models.Model):
-    class Type(models.TextChoices):
+    class Kind(models.TextChoices):
         TV_SERIES = "tv"
         MOVIE = "movie"
         OVA = "ova"
@@ -32,13 +32,13 @@ class Anime(models.Model):
         MUSIC = "music"
 
     class Status(models.TextChoices):
-        PLANNED = "planned"
-        AIRING = "airing"
-        RELEASED = "released"
+        ANNOUNCED = "anons"
+        AIRING = "ongoing"
+        FINISHED = "released"
 
     title = models.CharField(max_length=500, unique=True)
     slug = models.SlugField(max_length=500)
-    type_anime = models.CharField(max_length=50, choices=Type.choices)
+    kind = models.CharField(max_length=50, choices=Kind.choices)
     episodes = models.IntegerField(validators=[MinValueValidator(0)])
     status = models.CharField(max_length=50, choices=Status.choices)
     genres = models.ManyToManyField(Genre, blank=True)
