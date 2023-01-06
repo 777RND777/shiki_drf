@@ -8,10 +8,14 @@ class AnimeAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
 
 
-@admin.register(models.User)
-class UserAdmin(admin.ModelAdmin):
-    prepopulated_fields = {'slug': ('username',)}
+@admin.register(models.Genre)
+class GenreAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('name',)}
 
 
-admin.site.register(models.Genre)
+@admin.register(models.Producer)
+class ProducerAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('name',)}
+
+
 admin.site.register(models.Review)
