@@ -8,7 +8,7 @@ def get_anime_list(genre: str, studio: str) -> Anime:
     if len(genre) > 0:
         filter_kwargs['genres__slug'] = genre
     if len(studio) > 0:
-        filter_kwargs['producer__name'] = studio
+        filter_kwargs['studio__slug'] = studio
     return Anime.objects.filter(**filter_kwargs)
 
 

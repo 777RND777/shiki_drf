@@ -9,9 +9,9 @@ from . import models, services, serializers
 
 @api_view()
 def get_anime_list(request, genre: str = "", studio: str = ""):
-    if len(genre) > 0 and models.Genre.objects.filter(name=genre).first() is None:
+    if len(genre) > 0 and models.Genre.objects.filter(slug=genre).first() is None:
         return redirect(get_anime_list)
-    if len(studio) > 0 and models.Studio.objects.filter(name=genre).first() is None:
+    if len(studio) > 0 and models.Studio.objects.filter(slug=studio).first() is None:
         return redirect(get_anime_list)
 
     paginator = PageNumberPagination()
