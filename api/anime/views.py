@@ -1,4 +1,4 @@
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
@@ -28,7 +28,7 @@ def get_anime_list(request, kind: str = "", status: str = "", genre: str = "", s
 
 @api_view()
 def get_anime_detail(request, slug):
-    anime = services.get_anime_by_slug(slug)
+    anime = get_object_or_404(models.Anime, slug=slug)
     serializer = serializers.AnimeSerializer(anime)
     return Response(serializer.data)
 
@@ -36,7 +36,7 @@ def get_anime_detail(request, slug):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def review_anime(request, slug):
-    anime = services.get_anime_by_slug(slug)
+    anime = get_object_or_404(models.Anime, slug=slug)
     serializer = serializers.ReviewSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     data = serializer.validated_data

@@ -1,5 +1,3 @@
-from django.http import Http404
-
 from .models import Anime, Review
 
 
@@ -14,13 +12,6 @@ def get_anime_list(kind: str, status: str, genre: str, studio: str) -> Anime:
     if len(studio) > 0:
         filter_kwargs['studio__slug'] = studio
     return Anime.objects.filter(**filter_kwargs)
-
-
-def get_anime_by_slug(slug: str) -> Anime:
-    try:
-        return Anime.objects.get(slug=slug)
-    except Anime.DoesNotExist:
-        raise Http404
 
 
 def create_review(data: dict, user_id: int, anime_id: int) -> Review:

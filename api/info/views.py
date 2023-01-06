@@ -1,16 +1,17 @@
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from . import services
 from anime import models as anime_models
 from anime import serializers as anime_serializers
+from users import models as user_models
 from users import serializers as user_serializers
 
 
 @api_view()
 def get_user_detail(request, slug):
-    user = services.get_user_by_slug(slug)
+    user = get_object_or_404(user_models.User, slug=slug)
     serializer = user_serializers.UserSerializer(user)
     return Response(serializer.data)
 
