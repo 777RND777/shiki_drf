@@ -14,7 +14,7 @@ class Genre(models.Model):
         return self.name
 
 
-class Producer(models.Model):
+class Studio(models.Model):
     name = models.CharField(max_length=250, unique=True)
     slug = models.SlugField(max_length=250)
 
@@ -43,7 +43,7 @@ class Anime(models.Model):
     status = models.CharField(max_length=50, choices=Status.choices)
     genres = models.ManyToManyField(Genre, blank=True)
     score = models.FloatField(validators=score_validator, default=0)
-    producer = models.ForeignKey(Producer, on_delete=models.CASCADE)
+    studio = models.ForeignKey(Studio, on_delete=models.CASCADE)
     synopsis = models.TextField(blank=True)
 
     def __str__(self):

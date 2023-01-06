@@ -13,7 +13,7 @@ class GenreAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 
 
-@admin.register(models.Producer)
+@admin.register(models.Studio)
 class ProducerAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 
