@@ -14,12 +14,36 @@ class Genre(models.Model):
         return self.name
 
 
+class Producer(models.Model):
+    name = models.CharField(max_length=250, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Anime(models.Model):
+    class Type(models.TextChoices):
+        TV_SERIES = "tv"
+        MOVIE = "movie"
+        OVA = "ova"
+        ONA = "ona"
+        SPECIAL = "special"
+        MUSIC = "music"
+
+    class Status(models.TextChoices):
+        PLANNED = "planned"
+        AIRING = "airing"
+        RELEASED = "released"
+
     title = models.CharField(max_length=500, unique=True)
     slug = models.SlugField(max_length=500)
+    type_anime = models.CharField(max_length=50, choices=Type.choices)
     episodes = models.IntegerField(validators=[MinValueValidator(0)])
-    score = models.FloatField(validators=score_validator, default=0)
+    status = models.CharField(max_length=50, choices=Status.choices)
     genres = models.ManyToManyField(Genre, blank=True)
+    score = models.FloatField(validators=score_validator, default=0)
+    producer = models.ForeignKey(Producer, on_delete=models.CASCADE)
+    synopsis = models.TextField(blank=True)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
@@ -43,7 +67,7 @@ class Review(models.Model):
 
     anime = models.ForeignKey(Anime, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    status = models.CharField(max_length=50, choices=Status.choices, default=Status.COMPLETED)
+    status = models.CharField(max_length=50, choices=Status.choices)
     watched_episodes = models.IntegerField(default=0)
     score = models.IntegerField(validators=score_validator, default=0)
     text = models.TextField(blank=True)
