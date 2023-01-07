@@ -1,4 +1,7 @@
+from django.conf import settings
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.shortcuts import get_object_or_404, redirect
+from django.views.decorators.cache import cache_page
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
@@ -6,8 +9,11 @@ from rest_framework.response import Response
 
 from . import models, services, serializers
 
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+
 
 @api_view()
+@cache_page(CACHE_TTL)
 def get_anime_list(request, kind: str = "", status: str = "", genre: str = "", studio: str = ""):
     if len(kind) > 0 and kind not in models.Anime.Kind:
         return redirect(get_anime_list)
@@ -27,6 +33,7 @@ def get_anime_list(request, kind: str = "", status: str = "", genre: str = "", s
 
 
 @api_view()
+@cache_page(CACHE_TTL)
 def get_anime_detail(request, slug):
     anime = get_object_or_404(models.Anime, slug=slug)
     serializer = serializers.AnimeSerializer(anime)

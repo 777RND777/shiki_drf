@@ -1,3 +1,6 @@
+from django.conf import settings
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.views.decorators.cache import cache_page
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.pagination import PageNumberPagination
@@ -5,8 +8,11 @@ from rest_framework.response import Response
 
 from . import models, serializers, services
 
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+
 
 @api_view()
+@cache_page(CACHE_TTL)
 def get_user_list(request):
     paginator = PageNumberPagination()
     paginator.page_size = 20

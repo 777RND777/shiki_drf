@@ -1,4 +1,7 @@
+from django.conf import settings
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.shortcuts import get_object_or_404, redirect
+from django.views.decorators.cache import cache_page
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -8,8 +11,11 @@ from anime import serializers as anime_serializers
 from users import models as user_models
 from users import serializers as user_serializers
 
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+
 
 @api_view()
+@cache_page(CACHE_TTL)
 def get_user_detail(request, slug):
     user = get_object_or_404(user_models.User, slug=slug)
     serializer = user_serializers.UserSerializer(user)
@@ -17,6 +23,7 @@ def get_user_detail(request, slug):
 
 
 @api_view()
+@cache_page(CACHE_TTL)
 def get_review_list(request, slug, status: str = ""):
     if len(status) > 0 and status not in anime_models.Review.Status:
         return redirect(get_review_list, slug)

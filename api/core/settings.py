@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-(=5lr_aboj_vsr63c8ygvxi53zeq2o&^zzgv#j@6ikqkzcn6@z
 DEBUG = True
 
 ALLOWED_HOSTS = []
+INTERNAL_IPS = ["127.0.0.1"]
 
 
 # Application definition
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    "debug_toolbar",
     'rest_framework',
     'rest_framework.authtoken',
 
@@ -60,7 +62,20 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+        "KEY_PREFIX": "example",
+    }
+}
+CACHE_TTL = 60 * 15
 
 ROOT_URLCONF = 'core.urls'
 
