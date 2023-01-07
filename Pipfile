@@ -7,6 +7,10 @@ name = "pypi"
 django = "==4.1.4"
 djangorestframework = "==3.14.0"
 django-redis = "==5.2.0"
+celery = "==5.2.7"
+django-celery-beat = "==2.4.0"
+django-celery-results = "==2.4.0"
+python-decouple = "==3.6"
 
 [dev-packages]
 django-debug-toolbar = "==3.8.1"
