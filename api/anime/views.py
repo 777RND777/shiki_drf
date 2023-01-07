@@ -15,13 +15,13 @@ CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 @api_view()
 @cache_page(CACHE_TTL)
 def get_anime_list(request, *args, **kwargs):
-    if "kind" in kwargs and kwargs['kind'] not in models.Anime.Kind:
+    if 'kind' in kwargs and kwargs['kind'] not in models.Anime.Kind:
         return redirect(get_anime_list)
-    if "status" in kwargs and kwargs['status'] not in models.Anime.Status:
+    if 'status' in kwargs and kwargs['status'] not in models.Anime.Status:
         return redirect(get_anime_list)
-    if "genre" in kwargs and models.Genre.objects.filter(slug=kwargs['genre']).first() is None:
+    if 'genre' in kwargs and models.Genre.objects.filter(slug=kwargs['genre']).first() is None:
         return redirect(get_anime_list)
-    if "studio" in kwargs and models.Studio.objects.filter(slug=kwargs['studio']).first() is None:
+    if 'studio' in kwargs and models.Studio.objects.filter(slug=kwargs['studio']).first() is None:
         return redirect(get_anime_list)
 
     paginator = PageNumberPagination()
@@ -49,4 +49,4 @@ def review_anime(request, slug):
     data = serializer.validated_data
     review = services.create_review(data, request.user.pk, anime.pk)
     services.update_anime_score(data.get('score', review.score), anime)
-    return Response({"message": "OK"})
+    return Response({'message': 'OK'})

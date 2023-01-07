@@ -22,7 +22,7 @@ def get_user_list(request):
     return paginator.get_paginated_response(serializer.data)
 
 
-@api_view(["POST"])
+@api_view(['POST'])
 def sign_up(request):
     serializer = serializers.RegistrationSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)

@@ -24,17 +24,17 @@ class Studio(models.Model):
 
 class Anime(models.Model):
     class Kind(models.TextChoices):
-        TV_SERIES = "tv"
-        MOVIE = "movie"
-        OVA = "ova"
-        ONA = "ona"
-        SPECIAL = "special"
-        MUSIC = "music"
+        TV_SERIES = 'tv'
+        MOVIE = 'movie'
+        OVA = 'ova'
+        ONA = 'ona'
+        SPECIAL = 'special'
+        MUSIC = 'music'
 
     class Status(models.TextChoices):
-        ANNOUNCED = "anons"
-        AIRING = "ongoing"
-        FINISHED = "released"
+        ANNOUNCED = 'anons'
+        AIRING = 'ongoing'
+        FINISHED = 'released'
 
     title = models.CharField(max_length=500, unique=True)
     slug = models.SlugField(max_length=500)
@@ -55,12 +55,12 @@ class Anime(models.Model):
 
 class Review(models.Model):
     class Status(models.TextChoices):
-        PLANNED_TO_WATCH = "planned"
-        WATCHING = "watching"
-        REWATCHING = "rewatching"
-        COMPLETED = "completed"
-        ON_HOLD = "on_hold"
-        DROPPED = "dropped"
+        PLANNED_TO_WATCH = 'planned'
+        WATCHING = 'watching'
+        REWATCHING = 'rewatching'
+        COMPLETED = 'completed'
+        ON_HOLD = 'on_hold'
+        DROPPED = 'dropped'
 
     anime = models.ForeignKey(Anime, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -70,4 +70,4 @@ class Review(models.Model):
     text = models.TextField(blank=True)
 
     def __str__(self):
-        return f"{self.score} for {self.anime} from {self.user}"
+        return f'{self.score} for {self.anime} from {self.user}'

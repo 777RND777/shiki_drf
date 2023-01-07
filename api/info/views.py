@@ -24,7 +24,7 @@ def get_user_detail(request, slug):
 
 @api_view()
 @cache_page(CACHE_TTL)
-def get_review_list(request, slug, status: str = ""):
+def get_review_list(request, slug, status: str = ''):
     if len(status) > 0 and status not in anime_models.Review.Status:
         return redirect(get_review_list, slug)
 
