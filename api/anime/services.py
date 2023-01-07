@@ -1,16 +1,16 @@
 from .models import Anime, Review
 
 
-def get_anime_list(kind: str, status: str, genre: str, studio: str) -> Anime:
+def get_anime_list(config: dict) -> Anime:
     filter_kwargs = {}
-    if len(kind) > 0:
-        filter_kwargs['kind'] = kind
-    if len(status) > 0:
-        filter_kwargs['kind'] = status
-    if len(genre) > 0:
-        filter_kwargs['genres__slug'] = genre
-    if len(studio) > 0:
-        filter_kwargs['studio__slug'] = studio
+    if 'kind' in config:
+        filter_kwargs['kind'] = config['kind']
+    if 'status' in config:
+        filter_kwargs['status'] = config['status']
+    if 'genre' in config:
+        filter_kwargs['genres__slug'] = config['genre']
+    if 'studio' in config:
+        filter_kwargs['studio__slug'] = config['studio']
     return Anime.objects.filter(**filter_kwargs)
 
 

@@ -14,19 +14,19 @@ CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 @api_view()
 @cache_page(CACHE_TTL)
-def get_anime_list(request, kind: str = "", status: str = "", genre: str = "", studio: str = ""):
-    if len(kind) > 0 and kind not in models.Anime.Kind:
+def get_anime_list(request, *args, **kwargs):
+    if "kind" in kwargs and kwargs['kind'] not in models.Anime.Kind:
         return redirect(get_anime_list)
-    if len(status) > 0 and status not in models.Anime.Status:
+    if "status" in kwargs and kwargs['status'] not in models.Anime.Status:
         return redirect(get_anime_list)
-    if len(genre) > 0 and models.Genre.objects.filter(slug=genre).first() is None:
+    if "genre" in kwargs and models.Genre.objects.filter(slug=kwargs['genre']).first() is None:
         return redirect(get_anime_list)
-    if len(studio) > 0 and models.Studio.objects.filter(slug=studio).first() is None:
+    if "studio" in kwargs and models.Studio.objects.filter(slug=kwargs['studio']).first() is None:
         return redirect(get_anime_list)
 
     paginator = PageNumberPagination()
     paginator.page_size = 20
-    anime_objects = services.get_anime_list(kind, status, genre, studio)
+    anime_objects = services.get_anime_list(kwargs)
     result_page = paginator.paginate_queryset(anime_objects, request)
     serializer = serializers.AnimeSerializer(result_page, many=True)
     return paginator.get_paginated_response(serializer.data)
