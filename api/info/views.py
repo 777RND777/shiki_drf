@@ -6,10 +6,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from . import services
-from anime import models as anime_models
-from anime import serializers as anime_serializers
-from users import models as user_models
-from users import serializers as user_serializers
+from anime import models as anime_models, serializers as anime_serializers
+from users import models as user_models, serializers as user_serializers
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
