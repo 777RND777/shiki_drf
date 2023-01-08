@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import os
+import socket
 from pathlib import Path
 
 import decouple
@@ -25,10 +27,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-(=5lr_aboj_vsr63c8ygvxi53zeq2o&^zzgv#j@6ikqkzcn6@z'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = decouple.config("DEBUG", default=0)
+DEBUG = decouple.config('DEBUG', default=0)
 
 ALLOWED_HOSTS = []
+
 INTERNAL_IPS = ['127.0.0.1']
+ip = socket.gethostbyname(socket.gethostname())
+INTERNAL_IPS.append(ip[:-1] + '1')
 
 
 # Application definition
@@ -69,12 +74,6 @@ MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
-CELERY_RESULT_BACKEND = "django-db"
-CELERY_BROKER_URL = decouple.config('CELERY_BROKER_REDIS_URL', default='redis://localhost:6379')
-# this allows you to schedule items in the Django admin.
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
-CACHE_TTL = 60 * 15
-
 ROOT_URLCONF = 'shiki_drf.urls'
 
 TEMPLATES = [
@@ -100,10 +99,20 @@ WSGI_APPLICATION = 'shiki_drf.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': os.environ.get('SQL_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': os.environ.get('SQL_DATABASE', os.path.join(BASE_DIR, 'db.sqlite3')),
+        'USER': os.environ.get('SQL_USER', 'user'),
+        'PASSWORD': os.environ.get('SQL_PASSWORD', 'password'),
+        'HOST': os.environ.get('SQL_HOST', 'localhost'),
+        'PORT': os.environ.get('SQL_PORT', '5432'),
     }
 }
+
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_BROKER_URL = decouple.config('CELERY_BROKER_REDIS_URL', default='redis://localhost:6379')
+# this allows you to schedule items in the Django admin.
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
+CACHE_TTL = 60 * 15
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
