@@ -8,4 +8,5 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt \
     pip install psycopg2-binary
 
-COPY api /
+COPY api /api
+WORKDIR /api
