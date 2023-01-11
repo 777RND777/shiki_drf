@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.cache import cache_page
 from rest_framework.decorators import api_view, permission_classes
@@ -40,13 +41,15 @@ def get_anime_detail(request, slug):
     return Response(serializer.data)
 
 
-@api_view(['POST'])
+@api_view(['POST', 'PUT'])
 @permission_classes([IsAuthenticated])
 def review_anime(request, slug):
     anime = get_object_or_404(models.Anime, slug=slug)
     serializer = serializers.ReviewSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     data = serializer.validated_data
-    review = services.create_review(data, request.user.pk, anime.pk)
-    services.update_anime_score(data.get('score', review.score), anime)
-    return Response({'message': 'OK'})
+    with transaction.atomic():
+        review = services.create_review(data, request.user.pk, anime.pk)
+        if 'score' in data:
+            services.update_anime_score(data['score'], anime)
+    return Response(serializers.ReviewSerializer(instance=review).data)

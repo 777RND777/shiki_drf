@@ -5,7 +5,7 @@ services:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     environment:
-#      DEBUG: 1
+#      DEBUG: 0
       SQL_ENGINE: "django.db.backends.postgresql"
       SQL_DATABASE: "databaseName"
       SQL_USER: "yourPostgresUsername"
