@@ -112,7 +112,7 @@ CELERY_RESULT_BACKEND = 'django-db'
 CELERY_BROKER_URL = decouple.config('CELERY_BROKER_REDIS_URL', default='redis://localhost:6379')
 # this allows you to schedule items in the Django admin.
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
-CACHE_TTL = 60 * 15
+CACHE_TTL = 60 * 1
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

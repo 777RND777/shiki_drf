@@ -8,7 +8,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from . import models, services, serializers
+from . import models, services, serializers, tasks
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
@@ -51,5 +51,5 @@ def review_anime(request, slug):
     with transaction.atomic():
         review = services.create_review(data, request.user.pk, anime.pk)
         if 'score' in data:
-            services.update_anime_score(data['score'], anime)
+            tasks.update_anime_score.delay(anime.pk)
     return Response(serializers.ReviewSerializer(instance=review).data)

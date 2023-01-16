@@ -35,20 +35,3 @@ def update_review(review: Review, data: dict) -> Review:
     review.text = data.get('text', review.text)
     review.save()
     return review
-
-
-def update_anime_score(value: int, anime: Anime) -> None:
-    def get_anime_score(anime_id: int) -> float:
-        reviews = Review.objects.filter(anime_id=anime_id, score__gt=0)
-        if len(reviews) == 0:
-            return 0
-
-        score = 0
-        for review in reviews:
-            score += review.score
-        return round(score / len(reviews), 2)
-
-    if value == 0:
-        return
-    anime.score = get_anime_score(anime.pk)
-    anime.save()
