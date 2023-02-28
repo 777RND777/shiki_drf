@@ -1,5 +1,6 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.utils.text import slugify
 
 from users.models import User
 
@@ -10,6 +11,10 @@ class Genre(models.Model):
     name = models.CharField(max_length=250, unique=True)
     slug = models.SlugField(max_length=250)
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.name
 
@@ -17,6 +22,10 @@ class Genre(models.Model):
 class Studio(models.Model):
     name = models.CharField(max_length=250, unique=True)
     slug = models.SlugField(max_length=250)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -45,6 +54,10 @@ class Anime(models.Model):
     score = models.FloatField(validators=score_validator, default=0)
     studio = models.ForeignKey(Studio, on_delete=models.CASCADE)
     synopsis = models.TextField(blank=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title

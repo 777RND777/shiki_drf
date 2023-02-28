@@ -66,7 +66,13 @@ def user_change_payload():
 
 
 @pytest.fixture
-def filled_client(client, n, genres_payload, studios_payload, animes_payload):
+def client_with_user(client, user_payload):
+    _ = User.objects.create_user(**user_payload)
+    return client
+
+
+@pytest.fixture
+def client_with_anime(client, n, genres_payload, studios_payload, animes_payload):
     genres = [Genre.objects.create(**genre) for genre in genres_payload]
     studios = [Studio.objects.create(**studio) for studio in studios_payload]
     for i, anime in enumerate(animes_payload):
@@ -75,10 +81,4 @@ def filled_client(client, n, genres_payload, studios_payload, animes_payload):
         anime.save()
         anime.genres.add(*genres[i:n])
         anime.save()
-    return client
-
-
-@pytest.fixture
-def client_with_user(client, user_payload):
-    _ = User.objects.create_user(**user_payload)
     return client
