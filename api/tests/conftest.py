@@ -79,8 +79,6 @@ def filled_client(client, n, genres_payload, studios_payload, animes_payload):
 
 
 @pytest.fixture
-def user_client(client, user_payload):
-    _ = client.post('/users/sign_up', user_payload)
-    token = client.post('/users/sign_in', user_payload).data['token']
-    client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
+def client_with_user(client, user_payload):
+    _ = User.objects.create_user(**user_payload)
     return client
