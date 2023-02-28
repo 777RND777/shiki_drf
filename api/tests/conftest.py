@@ -29,19 +29,19 @@ def studios_payload(n):
 def animes_payload():
     return [
         {
-            'title': 'title 1',
+            'title': 'anime 1',
             'kind': 'tv',
             'episodes': 13,
             'status': 'ongoing',
         },
         {
-            'title': 'title 2',
+            'title': 'anime 2',
             'kind': 'movie',
             'episodes': 1,
             'status': 'anons',
         },
         {
-            'title': 'title 3',
+            'title': 'anime 3',
             'kind': 'tv',
             'episodes': 150,
             'status': 'released',
