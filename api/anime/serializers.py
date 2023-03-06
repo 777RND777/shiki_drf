@@ -3,7 +3,15 @@ from rest_framework import serializers
 from . import models
 
 
+class GenreSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Genre
+        fields = ('name',)
+
+
 class AnimeSerializer(serializers.ModelSerializer):
+    genres = GenreSerializer(read_only=True, many=True)
+
     class Meta:
         model = models.Anime
         fields = '__all__'
