@@ -82,3 +82,11 @@ def client_with_anime(client, n, genres_payload, studios_payload, animes_payload
         anime.genres.add(*genres[i:n])
         anime.save()
     return client
+
+
+@pytest.fixture
+def user_client(client_with_anime, user_payload):
+    _ = User.objects.create_user(**user_payload)
+    token = client_with_anime.post('/users/sign_in', user_payload).data['token']
+    client_with_anime.credentials(HTTP_AUTHORIZATION=f'Token {token}')
+    return client_with_anime
