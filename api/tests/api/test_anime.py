@@ -47,10 +47,10 @@ def test_get_anime_detail(client_with_anime, animes_payload):
 
 @pytest.mark.django_db
 def test_review_anime(user_client, animes_payload):
-    wrong_review = {'status': 'watched'}
+    wrong_review = {'status': 'fake_status'}
     planned_review = {'status': 'planned'}
-    on_hold_review = {'score': 1, 'status': 'on_hold', 'watched_episodes': 1}
-    completed_review = {'score': 10, 'status': 'completed'}
+    on_hold_review = {'status': 'on_hold', 'watched_episodes': 1}
+    completed_review = {'status': 'completed'}
 
     anime_slug = '-'.join(animes_payload[0]['title'].split(' '))
     response = user_client.post(f'/animes/fake-{anime_slug}/review', data=planned_review)
